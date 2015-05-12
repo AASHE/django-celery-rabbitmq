@@ -1,0 +1,14 @@
+# https://github.com/Supervisor/supervisor/issues/121#issuecomment-25202472
+---
+  
+- name: start supervisor service (celery)
+  service: name=supervisor state=started
+  sudo: yes
+
+- name: reload supervisor (celery)
+  shell: supervisorctl reload
+  sudo: yes
+
+- name: restart worker
+  supervisorctl: name={{app_name}}-celery state=restarted
+  sudo: yes

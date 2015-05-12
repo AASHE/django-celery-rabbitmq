@@ -1,0 +1,8 @@
+
+##
+# celery config
+#
+---
+
+- include: install_packages.yml
+- include: celery_init.yml

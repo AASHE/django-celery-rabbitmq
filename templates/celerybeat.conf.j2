@@ -1,0 +1,26 @@
+; ================================
+;  celery beat supervisor example
+; ================================
+
+[program:celerybeat]
+
+environment={% for k, v in app_env_vars.iteritems() %}{% if not loop.first %},{% endif %}{{ k }}="{{ v }}"{% endfor %}
+
+; Set full path to celery program if using virtualenv
+;command=celery beat -A myapp --schedule /var/lib/celery/beat.db --loglevel=INFO
+command={{app_env_dir}}/bin/python manage.py celery beat -s {{app_log_dir}}/beat.db --loglevel=INFO
+
+; remove the -A myapp argument if you are not using an app instance
+
+directory={{app_code_dir}}
+user={{app_user}}
+numprocs=1
+stdout_logfile={{app_log_dir}}/celerybeat.log
+stderr_logfile={{app_log_dir}}/celerybeat.log
+autostart=true
+autorestart=true
+startsecs=10
+
+; if rabbitmq is supervised, set its priority higher
+; so it starts first
+priority=999

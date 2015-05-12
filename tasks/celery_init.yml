@@ -1,0 +1,36 @@
+###
+# Configuration for celery init scripts
+---
+
+# - name: write celery conf file
+#   template:
+#     src=celeryd.conf.j2
+#     dest={{app_conf_dir}}/celeryd.conf
+#     mode=0640
+#   sudo: yes
+
+- name: write supervisor configuration for celery
+  template:
+    src=celeryd.conf.j2
+    dest=/etc/supervisor/conf.d/{{app_name}}-celery.conf
+  sudo: yes
+  notify:
+    - start supervisor service (celery)
+    - reload supervisor (celery)
+    - restart worker
+  tags:
+    - celery
+
+- name: write supervisor configuration for celery beat
+  template:
+    src=celerybeat.conf.j2
+    dest=/etc/supervisor/conf.d/{{app_name}}-beat.conf
+  sudo: yes
+  notify:
+    - reload supervisor (celery)
+    - restart worker
+  tags:
+    - celery
+  when: celerybeat
+
+# @assumption: the log directory is created and writable
