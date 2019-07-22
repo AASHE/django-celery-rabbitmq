@@ -7,10 +7,7 @@
 environment={% for k, v in app_env_vars.iteritems() %}{% if not loop.first %},{% endif %}{{ k }}="{{ v }}"{% endfor %}
 
 ; Set full path to celery program if using virtualenv
-;command=celery beat -A myapp --schedule /var/lib/celery/beat.db --loglevel=INFO
-command={{app_env_dir}}/bin/python manage.py celery beat -s {{app_log_dir}}/beat.db --loglevel=INFO
-
-; remove the -A myapp argument if you are not using an app instance
+command={{app_env_dir}}/bin/python celery beat -A {{app_name}} -s {{app_log_dir}}/beat.db --loglevel=INFO --pidfile=/tmp/celery.pid
 
 directory={{app_code_dir}}
 user={{app_user}}

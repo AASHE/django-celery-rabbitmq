@@ -7,9 +7,7 @@
 environment={% for k, v in app_env_vars.iteritems() %}{% if not loop.first %},{% endif %}{{ k }}="{{ v }}"{% endfor %}
 
 ; Set full path to celery program if using virtualenv
-;command={{app_env_dir}}/bin/celery worker -A {{app_name}} --loglevel=INFO
-;command={{app_env_dir}}/bin/celery worker --loglevel=INFO
-command={{app_env_dir}}/bin/python manage.py celery worker --loglevel=INFO
+command={{app_env_dir}}/bin/celery -A {{app_name}} worker --loglevel=DEBUG
 
 directory={{app_code_dir}}
 user={{app_user}}
