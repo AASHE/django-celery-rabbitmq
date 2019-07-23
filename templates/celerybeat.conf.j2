@@ -4,10 +4,13 @@
 
 [program:celerybeat]
 
-environment={% for k, v in app_env_vars.iteritems() %}{% if not loop.first %},{% endif %}{{ k }}="{{ v }}"{% endfor %}
+environment=
+  {% for k, v in app_env_vars.iteritems() %}
+    {% if not loop.first %}, {% endif %}{{ k }}="{{ v }}"
+  {% endfor %}
 
 ; Set full path to celery program if using virtualenv
-command={{app_env_dir}}/bin/python celery beat -A {{app_name}} -s {{app_log_dir}}/beat.db --loglevel=INFO --pidfile=/tmp/celery.pid
+command={{app_env_dir}}/bin/celery beat --config {{app_code_dir}}/stars/celery.py -A {{app_name}} -s {{app_log_dir}}/beat.db --loglevel=INFO --pidfile=/tmp/celerybeat.pid
 
 directory={{app_code_dir}}
 user={{app_user}}

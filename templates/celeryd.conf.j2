@@ -4,10 +4,14 @@
 
 [program:{{app_name}}-celery]
 
-environment={% for k, v in app_env_vars.iteritems() %}{% if not loop.first %},{% endif %}{{ k }}="{{ v }}"{% endfor %}
+environment=
+  {% for k, v in app_env_vars.iteritems() %}
+    {% if not loop.first %}, {% endif %}{{ k }}="{{ v }}"
+  {% endfor %}
+
 
 ; Set full path to celery program if using virtualenv
-command={{app_env_dir}}/bin/celery -A {{app_name}} worker --loglevel=DEBUG
+command={{app_env_dir}}/bin/celery -A {{app_name}} worker --loglevel=DEBUG --pidfile=/tmp/celery.pid
 
 directory={{app_code_dir}}
 user={{app_user}}
